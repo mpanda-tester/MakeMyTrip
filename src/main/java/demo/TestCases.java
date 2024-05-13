@@ -1,20 +1,23 @@
 package demo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
-import java.util.logging.Level;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 
 public class TestCases {
-    ChromeDriver driver;
-    public TestCases()
-    {
+    private static RemoteWebDriver driver;
+
+    public TestCases() throws MalformedURLException {
         System.out.println("Constructor: TestCases");
 
         WebDriverManager.chromedriver().timeout(30).setup();
@@ -25,13 +28,10 @@ public class TestCases {
         logs.enable(LogType.BROWSER, Level.ALL);
         logs.enable(LogType.DRIVER, Level.ALL);
         options.setCapability("goog:loggingPrefs", logs);
-        options.addArguments("start-maximized");
-        options.addArguments("--disable-blink-features=AutomationControlled");
 
-        // Set path for log file
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, "chromedriver.log");
-
-        driver = new ChromeDriver(options);
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        driver = new RemoteWebDriver(new URL("http://localhost:8082/wd/hub"), capabilities);
 
         // Set browser to maximize and wait
         driver.manage().window().maximize();
@@ -39,20 +39,16 @@ public class TestCases {
 
     }
 
-    public void endTest()
-    {
+    public void endTest() {
         System.out.println("End Test: TestCases");
-        driver.close();
-        driver.quit();
-
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
-    
-    public  void testCase01(){
+    public void testCase01() {
         System.out.println("Start Test case: testCase01");
         driver.get("https://www.google.com");
-        System.out.println("end Test case: testCase02");
+        System.out.println("End Test case: testCase01");
     }
-
-
 }
