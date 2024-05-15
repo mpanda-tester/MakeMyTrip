@@ -1,20 +1,20 @@
 package demo;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.util.logging.Level;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
-import java.util.logging.Level;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class TestCases {
     ChromeDriver driver;
-    public TestCases()
-    {
+
+    public TestCases() {
         System.out.println("Constructor: TestCases");
 
         WebDriverManager.chromedriver().timeout(30).setup();
@@ -36,23 +36,19 @@ public class TestCases {
         // Set browser to maximize and wait
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-
     }
 
-    public void endTest()
-    {
+    public void endTest() {
         System.out.println("End Test: TestCases");
         driver.close();
         driver.quit();
 
     }
 
-    
-    public  void testCase01(){
+    public void testCase01() {
         System.out.println("Start Test case: testCase01");
         driver.get("https://www.google.com");
         System.out.println("end Test case: testCase02");
     }
-
 
 }
